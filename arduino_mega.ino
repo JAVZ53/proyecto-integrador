@@ -6,7 +6,13 @@ float tiempo2;
 float tiempo3;
 float tiempo4;
 
-int x=0;
+int x = 0;
+int l=8;
+int j=6;
+int p=3;
+
+char recep;
+char envi;
 
 int distancia1;
 int distancia2;
@@ -18,7 +24,8 @@ int aleatorio;
 int son;
 
 LiquidCrystal_I2C lcd(0x27, 20, 4);
-SoftwareSerial mySerial(31, 33);
+
+SoftwareSerial mySerial(27, 29);
 
 #define sonido 10
 
@@ -50,13 +57,27 @@ SoftwareSerial mySerial(31, 33);
 #define semyds 50
 #define semrds 52
 
+#define sempasog1 53
+#define sempasoy1 51
+#define sempasor1 49
+#define sempasog2 47
+#define sempasoy2 45
+#define sempasor2 43
+#define sempasog3 41
+#define sempasoy3 39
+#define sempasor3 37
+#define sempasog4 35
+#define sempasoy4 33
+#define sempasor4 31
+
 
 void setup() {
 
   Serial.begin(9600);
   mySerial.begin(9600);
-  lcd.begin();                      
+  lcd.begin();
   lcd.backlight();
+  lcd.setCursor(0, 0);
 
   pinMode(sonido, INPUT);
 
@@ -79,6 +100,19 @@ void setup() {
   pinMode(semyds, OUTPUT);
   pinMode(semrds, OUTPUT);
 
+  pinMode(sempasog1, OUTPUT);
+  pinMode(sempasoy1, OUTPUT);
+  pinMode(sempasor1, OUTPUT);
+  pinMode(sempasog2, OUTPUT);
+  pinMode(sempasoy2, OUTPUT);
+  pinMode(sempasor2, OUTPUT);
+  pinMode(sempasog3, OUTPUT);
+  pinMode(sempasoy3, OUTPUT);
+  pinMode(sempasor3, OUTPUT);
+  pinMode(sempasog4, OUTPUT);
+  pinMode(sempasoy4, OUTPUT);
+  pinMode(sempasor4, OUTPUT);
+
   pinMode(disttrig1, OUTPUT);
   pinMode(distecho1, INPUT);
   pinMode(disttrig2, OUTPUT);
@@ -87,14 +121,29 @@ void setup() {
   pinMode(distecho3, INPUT);
   pinMode(disttrig4, OUTPUT);
   pinMode(distecho4, INPUT);
-
 }
 
 void loop() {
   //mySerial.write('H');
-  son=digitalRead(sonido);
-  while(son == HIGH){
+  lcd.clear();
+  son = digitalRead(sonido);
+  lcd.setCursor(0, 0);
+  while (son == LOW) {
+    son = digitalRead(sonido);
     lcd.clear();
+    lcd.setCursor(0, 0);
+    digitalWrite(sempasog1, HIGH);
+    digitalWrite(sempasoy1, LOW);
+    digitalWrite(sempasor1, LOW);
+    digitalWrite(sempasog2, HIGH);
+    digitalWrite(sempasoy2, LOW);
+    digitalWrite(sempasor2, LOW);
+    digitalWrite(sempasog3, HIGH);
+    digitalWrite(sempasoy3, LOW);
+    digitalWrite(sempasor3, LOW);
+    digitalWrite(sempasog4, HIGH);
+    digitalWrite(sempasoy4, LOW);
+    digitalWrite(sempasor4, LOW);
     digitalWrite(semgn, LOW);
     digitalWrite(semyn, LOW);
     digitalWrite(semrn, HIGH);
@@ -108,603 +157,1806 @@ void loop() {
     digitalWrite(semyi, LOW);
     digitalWrite(semri, HIGH);
     digitalWrite(semgdn, LOW);
-    digitalWrite(semydn, LOW); 
-    digitalWrite(semrdn, HIGH); 
-    digitalWrite(semgds, LOW); 
+    digitalWrite(semydn, LOW);
+    digitalWrite(semrdn, HIGH);
+    digitalWrite(semgds, LOW);
     digitalWrite(semyds, LOW);
     digitalWrite(semrds, HIGH);
-  
+
     digitalWrite(disttrig1, HIGH);
     delay(1);
     digitalWrite(disttrig1, LOW);
     tiempo1 = pulseIn(distecho1, HIGH);
-    distancia1 = 0.01715*tiempo1;
+    distancia1 = 0.01715 * tiempo1;
     digitalWrite(disttrig2, HIGH);
     delay(1);
     digitalWrite(disttrig2, LOW);
     tiempo2 = pulseIn(distecho2, HIGH);
-    distancia2 = 0.01715*tiempo2;
+    distancia2 = 0.01715 * tiempo2;
     digitalWrite(disttrig3, HIGH);
     delay(1);
     digitalWrite(disttrig3, LOW);
     tiempo3 = pulseIn(distecho3, HIGH);
-    distancia3 = 0.01715*tiempo3;
+    distancia3 = 0.01715 * tiempo3;
     digitalWrite(disttrig4, HIGH);
     delay(1);
     digitalWrite(disttrig4, LOW);
     tiempo4 = pulseIn(distecho4, HIGH);
-    distancia4 = 0.01715*tiempo4;
-    while(distancia1<20 and distancia2<20 and distancia3<20 and distancia4<20){
+    distancia4 = 0.01715 * tiempo4;
+    while (distancia1 < l and distancia2 < l and distancia3 < l and distancia4 < l) {
       aleatorio = random(1, 5);
-      digitalWrite(disttrig1, HIGH);
-      delay(1);
-      digitalWrite(disttrig1, LOW);
-      tiempo1 = pulseIn(distecho1, HIGH);
-      distancia1 = 0.01715*tiempo1;
-      digitalWrite(disttrig2, HIGH);
-      delay(1);
-      digitalWrite(disttrig2, LOW);
-      tiempo2 = pulseIn(distecho2, HIGH);
-      distancia2 = 0.01715*tiempo2;
-      digitalWrite(disttrig3, HIGH);
-      delay(1);
-      digitalWrite(disttrig3, LOW);
-      tiempo3 = pulseIn(distecho3, HIGH);
-      distancia3 = 0.01715*tiempo3;
-      digitalWrite(disttrig4, HIGH);
-      delay(1);
-      digitalWrite(disttrig4, LOW);
-      tiempo4 = pulseIn(distecho4, HIGH);
-      distancia4 = 0.01715*tiempo4;
-      if(aleatorio = 1){
-        if(distancia1<10){
-          digitalWrite(semrn, LOW);
-          digitalWrite(semgn, HIGH);
-          delay(1600);
+      if (mySerial.available()){
+        recep=mySerial.read();
+        mySerial.print('n');
+        if(recep == 'a' or recep == 'b'){
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasoy2, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasoy4, LOW);
+          digitalWrite(sempasor4, LOW);
           digitalWrite(semgn, LOW);
-          for (x; x<4; x++){
-            digitalWrite(semyn, HIGH);
-            delay(500);
-            digitalWrite(semyn, LOW);
-            delay(500);
-          }
-          x=0;
-          digitalWrite(semrn, HIGH);
-        }
-      }
-      else if(distancia1<15){
-        digitalWrite(semrdn, LOW);
-        digitalWrite(semgdn, HIGH);
-        delay(1600);
-        digitalWrite(semgdn, LOW);
-        for (x; x<4; x++){
-          digitalWrite(semydn, HIGH);
-          delay(500);
-          digitalWrite(semydn, LOW);
-          delay(500);
-        }
-        x=0;
-        digitalWrite(semrdn, HIGH);
-      }
-    
-      else if(aleatorio = 2){
-        if(distancia2<10){
-          digitalWrite(semrd, LOW);
-          digitalWrite(semgd, HIGH);
-          delay(1600);
-          digitalWrite(semgd, LOW);
-          for (x; x<4; x++){
-            digitalWrite(semyd, HIGH);
-            delay(500);
-            digitalWrite(semyd, LOW);
-            delay(500);
-          }
-          x=0;
-          digitalWrite(semrd, HIGH);
-        }
-      }
-      else if(aleatorio = 3){
-        if(distancia3<10){
-          digitalWrite(semrs, LOW);
-          digitalWrite(semgs, HIGH);
-          delay(1600);
+          digitalWrite(semyn, LOW);
+          digitalWrite(semrn, LOW);
           digitalWrite(semgs, LOW);
-          for (x; x<4; x++){
+          digitalWrite(semys, LOW);
+          digitalWrite(semrs, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semyd, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(semyi, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(semgdn, LOW);
+          digitalWrite(semydn, LOW);
+          digitalWrite(semrdn, LOW);
+          digitalWrite(semgds, LOW);
+          digitalWrite(semyds, LOW);
+          digitalWrite(semrds, LOW);
+          digitalWrite(sempasog1, HIGH);
+          digitalWrite(semgn, HIGH);
+          digitalWrite(semgs, HIGH);
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 3);
+          lcd.print("puede avanzar v");
+          delay(7000);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(semgs, LOW);
+          digitalWrite(sempasoy1, HIGH);
+          for(x; x<4; x++){
+            digitalWrite(semyn, HIGH);
             digitalWrite(semys, HIGH);
             delay(500);
+            digitalWrite(semyn, LOW);
             digitalWrite(semys, LOW);
             delay(500);
-        }
-        x=0;
-        digitalWrite(semrs, HIGH);
-      }
-      else if(distancia3<15){
-        digitalWrite(semrds, LOW);
-        digitalWrite(semgds, HIGH);
-        delay(1600);
-        digitalWrite(semgds, LOW);
-        for (x; x<4; x++){
-          digitalWrite(semyds, HIGH);
-          delay(500);
-          digitalWrite(semyds, LOW);
-          delay(500);
-        }
-        x=0;
-        digitalWrite(semrds, HIGH);
-      }
-  
-      else if(aleatorio = 4){
-          if(distancia4<10){
-            digitalWrite(semri, LOW);
-            digitalWrite(semgi, HIGH);
-            delay(1600);
-            digitalWrite(semgi, LOW);
-            for (x; x<4; x++){
-              digitalWrite(semyi, HIGH);
-              delay(500);
-              digitalWrite(semyi, LOW);
-              delay(500);
-            }
-            x=0;
-            digitalWrite(semri, HIGH);
           }
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, HIGH);
+          digitalWrite(semrn, HIGH);
+          digitalWrite(semrs, HIGH);
+          lcd.clear();
+        }
+        else if(recep == 'c' or recep == 'd'){
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasoy2, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasoy4, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(semyn, LOW);
+          digitalWrite(semrn, LOW);
+          digitalWrite(semgs, LOW);
+          digitalWrite(semys, LOW);
+          digitalWrite(semrs, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semyd, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(semyi, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(semgdn, LOW);
+          digitalWrite(semydn, LOW);
+          digitalWrite(semrdn, LOW);
+          digitalWrite(semgds, LOW);
+          digitalWrite(semyds, LOW);
+          digitalWrite(semrds, LOW);
+          digitalWrite(sempasog2, HIGH);
+          digitalWrite(semgd, HIGH);
+          digitalWrite(semgi, HIGH);
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 3);
+          lcd.print("puede avanzar v");
+          delay(7000);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(sempasoy2, HIGH);
+          for(x; x<4; x++){
+            digitalWrite(semyd, HIGH);
+            digitalWrite(semyi, HIGH);
+            delay(500);
+            digitalWrite(semyd, LOW);
+            digitalWrite(semyi, LOW);
+            delay(500);
+          }
+          digitalWrite(sempasoy2, LOW);
+          digitalWrite(sempasor2, HIGH);
+          digitalWrite(semrd, HIGH);
+          digitalWrite(semri, HIGH);
+          lcd.clear();
+        }
+        else if(recep == 'e' or recep == 'f'){
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasoy2, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasoy4, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(semyn, LOW);
+          digitalWrite(semrn, LOW);
+          digitalWrite(semgs, LOW);
+          digitalWrite(semys, LOW);
+          digitalWrite(semrs, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semyd, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(semyi, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(semgdn, LOW);
+          digitalWrite(semydn, LOW);
+          digitalWrite(semrdn, LOW);
+          digitalWrite(semgds, LOW);
+          digitalWrite(semyds, LOW);
+          digitalWrite(semrds, LOW);
+          digitalWrite(sempasog3, HIGH);
+          digitalWrite(semgn, HIGH);
+          digitalWrite(semgs, HIGH);
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 3);
+          lcd.print("puede avanzar v");
+          delay(7000);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(semgs, LOW);
+          digitalWrite(sempasoy3, HIGH);
+          for(x; x<4; x++){
+            digitalWrite(semyn, HIGH);
+            digitalWrite(semys, HIGH);
+            delay(500);
+            digitalWrite(semyn, LOW);
+            digitalWrite(semys, LOW);
+            delay(500);
+          }
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, HIGH);
+          digitalWrite(semrn, HIGH);
+          digitalWrite(semrs, HIGH);
+          lcd.clear();
+        }
+        else if(recep == 'g' or recep == 'h'){
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasoy2, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasoy4, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(semyn, LOW);
+          digitalWrite(semrn, LOW);
+          digitalWrite(semgs, LOW);
+          digitalWrite(semys, LOW);
+          digitalWrite(semrs, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semyd, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(semyi, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(semgdn, LOW);
+          digitalWrite(semydn, LOW);
+          digitalWrite(semrdn, LOW);
+          digitalWrite(semgds, LOW);
+          digitalWrite(semyds, LOW);
+          digitalWrite(semrds, LOW);
+          digitalWrite(sempasog4, HIGH);
+          digitalWrite(semgd, HIGH);
+          digitalWrite(semgi, HIGH);
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 3);
+          lcd.print("puede avanzar v");
+          delay(7000);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(sempasoy4, HIGH);
+          for(x; x<4; x++){
+            digitalWrite(semyd, HIGH);
+            digitalWrite(semyi, HIGH);
+            delay(500);
+            digitalWrite(semyd, LOW);
+            digitalWrite(semyi, LOW);
+            delay(500);
+          }
+          digitalWrite(sempasoy4, LOW);
+          digitalWrite(sempasor4, HIGH);
+          digitalWrite(semrd, HIGH);
+          digitalWrite(semri, HIGH);
+          lcd.clear();
         }
       }
-    }
-    while((distancia1<20 and distancia2<20 and distancia3<20) or (distancia1<20 and distancia2<20 and distancia4<20) or (distancia1<20 and distancia3<20 and distancia4<20) or (distancia2<20 and distancia2<20 and distancia4<20)){
-      aleatorio = random(1, 5);
       digitalWrite(disttrig1, HIGH);
       delay(1);
       digitalWrite(disttrig1, LOW);
       tiempo1 = pulseIn(distecho1, HIGH);
-      distancia1 = 0.01715*tiempo1;
+      distancia1 = 0.01715 * tiempo1;
       digitalWrite(disttrig2, HIGH);
       delay(1);
       digitalWrite(disttrig2, LOW);
       tiempo2 = pulseIn(distecho2, HIGH);
-      distancia2 = 0.01715*tiempo2;
+      distancia2 = 0.01715 * tiempo2;
       digitalWrite(disttrig3, HIGH);
       delay(1);
       digitalWrite(disttrig3, LOW);
       tiempo3 = pulseIn(distecho3, HIGH);
-      distancia3 = 0.01715*tiempo3;
+      distancia3 = 0.01715 * tiempo3;
       digitalWrite(disttrig4, HIGH);
       delay(1);
       digitalWrite(disttrig4, LOW);
       tiempo4 = pulseIn(distecho4, HIGH);
-      distancia4 = 0.01715*tiempo4;
-      if(aleatorio = 1){
-        if(distancia1<10){
+      distancia4 = 0.01715 * tiempo4;
+      if (aleatorio = 1) {
+        if (distancia1 < p) {
+          mySerial.print('k');
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 1);
+          lcd.print("puede doblar >");
+          lcd.setCursor(0,2);
+          lcd.print("puede avanzar v");
+          lcd.setCursor(0,3);
+          lcd.print("puede doblar <");
           digitalWrite(semrn, LOW);
+          digitalWrite(semrs, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
           digitalWrite(semgn, HIGH);
-          delay(1600);
+          digitalWrite(semgs, HIGH);
+          digitalWrite(sempasog1, HIGH);
+          delay(7000);
           digitalWrite(semgn, LOW);
-          for (x; x<4; x++){
+          digitalWrite(semgn, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasoy1, HIGH);
+          for (x; x < 4; x++) {
             digitalWrite(semyn, HIGH);
+            digitalWrite(semys, HIGH);
             delay(500);
             digitalWrite(semyn, LOW);
+            digitalWrite(semys, LOW);
             delay(500);
           }
-          x=0;
+          x = 0;
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, HIGH);
           digitalWrite(semrn, HIGH);
+          digitalWrite(semrs, HIGH);
+          lcd.clear();
         }
-        else if(distancia1<15){
+        else if (distancia1 < j) {
+          mySerial.print('k');
+          lcd.print("puede avanzar ^");
           digitalWrite(semrdn, LOW);
+          digitalWrite(semrn, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
           digitalWrite(semgdn, HIGH);
-          delay(1600);
+          digitalWrite(semrn, HIGH);
+          digitalWrite(sempasog1, HIGH);
+          delay(7000);
+          lcd.setCursor(0, 1);
+          lcd.print("puede doblar <");
           digitalWrite(semgdn, LOW);
-          for (x; x<4; x++){
+          digitalWrite(semgn, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasoy1, HIGH);
+          for (x; x < 4; x++) {
             digitalWrite(semydn, HIGH);
+            digitalWrite(semyn, HIGH);
             delay(500);
             digitalWrite(semydn, LOW);
+            digitalWrite(semyn, LOW);
             delay(500);
           }
-          x=0;
+          x = 0;
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, HIGH);
           digitalWrite(semrdn, HIGH);
+          digitalWrite(semrn, HIGH);
+          lcd.clear();
         }
       }
-      else if(aleatorio = 2){
-        if(distancia2<10){
+      else if (aleatorio = 2) {
+        if (distancia2 < p) {
+          mySerial.print('k');
+          lcd.print("puede avanzar >");
+          lcd.print("puede avanzar <");
           digitalWrite(semrd, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
           digitalWrite(semgd, HIGH);
-          delay(1600);
+          digitalWrite(semri, HIGH);
+          digitalWrite(sempasog2, HIGH);
+          delay(7000);
+          digitalWrite(sempasog2, LOW);
           digitalWrite(semgd, LOW);
-          for (x; x<4; x++){
+          digitalWrite(semgi, LOW);
+          digitalWrite(sempasoy2, HIGH);
+          for (x; x < 4; x++) {
             digitalWrite(semyd, HIGH);
+            digitalWrite(semyi, HIGH);
             delay(500);
             digitalWrite(semyd, LOW);
+            digitalWrite(semyi, LOW);
             delay(500);
           }
-          x=0;
+          x = 0;
+          digitalWrite(sempasoy2, LOW);          
           digitalWrite(semrd, HIGH);
+          digitalWrite(semri, HIGH);
+          digitalWrite(sempasor2, HIGH);
+          lcd.clear();
         }
-      }
-      else if(aleatorio = 3){
-        if(distancia3<10){
+      } 
+      else if (aleatorio = 3) {
+        if (distancia3 < p) {
+          mySerial.print('k');
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 1);
+          lcd.print("puede doblar >");
+          lcd.setCursor(0,2);
+          lcd.print("puede avanzar v");
+          lcd.setCursor(0,3);
+          lcd.print("puede doblar <");
           digitalWrite(semrs, LOW);
+          digitalWrite(semrn, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
           digitalWrite(semgs, HIGH);
-          delay(1600);
+          digitalWrite(semrs, HIGH);
+          digitalWrite(sempasog3, HIGH);
+          delay(7000);
           digitalWrite(semgs, LOW);
-          for (x; x<4; x++){
+          digitalWrite(semgn, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, HIGH);
+          for (x; x < 4; x++) {
             digitalWrite(semys, HIGH);
+            digitalWrite(semyn, HIGH);
             delay(500);
             digitalWrite(semys, LOW);
+            digitalWrite(semyn, LOW);
             delay(500);
           }
-          x=0;
+          x = 0;
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, HIGH);
           digitalWrite(semrs, HIGH);
+          digitalWrite(semrn, HIGH);
+          lcd.clear();
         }
-        else if(distancia3<15){
+        else if (distancia1 < j) {
+          mySerial.print('k');
+          lcd.print("puede avanzar v");
           digitalWrite(semrds, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
           digitalWrite(semgds, HIGH);
-          delay(1600);
+          digitalWrite(sempasog3, HIGH);
+          delay(7000);
+          lcd.setCursor(0, 1);
+          lcd.print("puede doblar >");
           digitalWrite(semgds, LOW);
-          for (x; x<4; x++){
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, HIGH);
+          for (x; x < 4; x++) {
             digitalWrite(semyds, HIGH);
             delay(500);
             digitalWrite(semyds, LOW);
             delay(500);
           }
-        x=0;
-        digitalWrite(semrds, HIGH);
+          x = 0;
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, HIGH);
+          digitalWrite(semrds, HIGH);
+          lcd.clear();
+        }
       }
-  
-      else if(aleatorio = 4){
-        digitalWrite(semri, LOW);
-        if(distancia4<10){
+      else if (aleatorio = 4) {
+        if (distancia4 < p) {
+          mySerial.print('k');
+          lcd.print("puede avanzar <");
+          lcd.print("puede avanzar >");
           digitalWrite(semri, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
           digitalWrite(semgi, HIGH);
-          delay(1600);
-          digitalWrite(semgi, LOW);
-          for (x; x<4; x++){
+          digitalWrite(semgd, HIGH);
+          digitalWrite(sempasog4, HIGH);
+          delay(7000);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(sempasoy4, HIGH);
+          for (x; x < 4; x++) {
             digitalWrite(semyi, HIGH);
+            digitalWrite(semrd, HIGH);
             delay(500);
+            digitalWrite(semyi, LOW);
             digitalWrite(semyi, LOW);
             delay(500);
           }
-          x=0;
+          x = 0;
+          digitalWrite(sempasoy4, LOW);          
           digitalWrite(semri, HIGH);
+          digitalWrite(semrd, HIGH);
+          digitalWrite(sempasor4, HIGH);
+          lcd.clear();
         }
       }
-      }
     }
-    while((distancia1<20 and distancia2<20) or (distancia1<20 and distancia3<20) or (distancia1<20 and distancia4<20) or (distancia2<20 and distancia3<20) or (distancia2<20 and distancia4<20) or (distancia3<20 and distancia4<20)){
+  
+    while ((distancia1 < l and distancia2 < l and distancia3 < l) or (distancia1 < l and distancia2 < l and distancia4 < l) or (distancia1 < l and distancia3 < l and distancia4 < l) or (distancia2 < l and distancia2 < l and distancia4 < l)) {
       aleatorio = random(1, 5);
+      if (mySerial.available()){
+        recep=mySerial.read();
+        mySerial.print('n');
+        if(recep == 'a' or recep == 'b'){
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasoy2, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasoy4, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(semyn, LOW);
+          digitalWrite(semrn, LOW);
+          digitalWrite(semgs, LOW);
+          digitalWrite(semys, LOW);
+          digitalWrite(semrs, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semyd, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(semyi, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(semgdn, LOW);
+          digitalWrite(semydn, LOW);
+          digitalWrite(semrdn, LOW);
+          digitalWrite(semgds, LOW);
+          digitalWrite(semyds, LOW);
+          digitalWrite(semrds, LOW);
+          digitalWrite(sempasog1, HIGH);
+          digitalWrite(semgn, HIGH);
+          digitalWrite(semgs, HIGH);
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 3);
+          lcd.print("puede avanzar v");
+          delay(7000);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(semgs, LOW);
+          digitalWrite(sempasoy1, HIGH);
+          for(x; x<4; x++){
+            digitalWrite(semyn, HIGH);
+            digitalWrite(semys, HIGH);
+            delay(500);
+            digitalWrite(semyn, LOW);
+            digitalWrite(semys, LOW);
+            delay(500);
+          }
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, HIGH);
+          digitalWrite(semrn, HIGH);
+          digitalWrite(semrs, HIGH);
+          lcd.clear();
+        }
+        else if(recep == 'c' or recep == 'd'){
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasoy2, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasoy4, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(semyn, LOW);
+          digitalWrite(semrn, LOW);
+          digitalWrite(semgs, LOW);
+          digitalWrite(semys, LOW);
+          digitalWrite(semrs, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semyd, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(semyi, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(semgdn, LOW);
+          digitalWrite(semydn, LOW);
+          digitalWrite(semrdn, LOW);
+          digitalWrite(semgds, LOW);
+          digitalWrite(semyds, LOW);
+          digitalWrite(semrds, LOW);
+          digitalWrite(sempasog2, HIGH);
+          digitalWrite(semgd, HIGH);
+          digitalWrite(semgi, HIGH);
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 3);
+          lcd.print("puede avanzar v");
+          delay(7000);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(sempasoy2, HIGH);
+          for(x; x<4; x++){
+            digitalWrite(semyd, HIGH);
+            digitalWrite(semyi, HIGH);
+            delay(500);
+            digitalWrite(semyd, LOW);
+            digitalWrite(semyi, LOW);
+            delay(500);
+          }
+          digitalWrite(sempasoy2, LOW);
+          digitalWrite(sempasor2, HIGH);
+          digitalWrite(semrd, HIGH);
+          digitalWrite(semri, HIGH);
+          lcd.clear();
+        }
+        else if(recep == 'e' or recep == 'f'){
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasoy2, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasoy4, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(semyn, LOW);
+          digitalWrite(semrn, LOW);
+          digitalWrite(semgs, LOW);
+          digitalWrite(semys, LOW);
+          digitalWrite(semrs, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semyd, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(semyi, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(semgdn, LOW);
+          digitalWrite(semydn, LOW);
+          digitalWrite(semrdn, LOW);
+          digitalWrite(semgds, LOW);
+          digitalWrite(semyds, LOW);
+          digitalWrite(semrds, LOW);
+          digitalWrite(sempasog3, HIGH);
+          digitalWrite(semgn, HIGH);
+          digitalWrite(semgs, HIGH);
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 3);
+          lcd.print("puede avanzar v");
+          delay(7000);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(semgs, LOW);
+          digitalWrite(sempasoy3, HIGH);
+          for(x; x<4; x++){
+            digitalWrite(semyn, HIGH);
+            digitalWrite(semys, HIGH);
+            delay(500);
+            digitalWrite(semyn, LOW);
+            digitalWrite(semys, LOW);
+            delay(500);
+          }
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, HIGH);
+          digitalWrite(semrn, HIGH);
+          digitalWrite(semrs, HIGH);
+          lcd.clear();
+        }
+        else if(recep == 'g' or recep == 'h'){
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasoy2, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasoy4, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(semyn, LOW);
+          digitalWrite(semrn, LOW);
+          digitalWrite(semgs, LOW);
+          digitalWrite(semys, LOW);
+          digitalWrite(semrs, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semyd, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(semyi, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(semgdn, LOW);
+          digitalWrite(semydn, LOW);
+          digitalWrite(semrdn, LOW);
+          digitalWrite(semgds, LOW);
+          digitalWrite(semyds, LOW);
+          digitalWrite(semrds, LOW);
+          digitalWrite(sempasog4, HIGH);
+          digitalWrite(semgd, HIGH);
+          digitalWrite(semgi, HIGH);
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 3);
+          lcd.print("puede avanzar v");
+          delay(7000);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(sempasoy4, HIGH);
+          for(x; x<4; x++){
+            digitalWrite(semyd, HIGH);
+            digitalWrite(semyi, HIGH);
+            delay(500);
+            digitalWrite(semyd, LOW);
+            digitalWrite(semyi, LOW);
+            delay(500);
+          }
+          digitalWrite(sempasoy4, LOW);
+          digitalWrite(sempasor4, HIGH);
+          digitalWrite(semrd, HIGH);
+          digitalWrite(semri, HIGH);
+          lcd.clear();
+        }
+      }
       digitalWrite(disttrig1, HIGH);
       delay(1);
       digitalWrite(disttrig1, LOW);
       tiempo1 = pulseIn(distecho1, HIGH);
-      distancia1 = 0.01715*tiempo1;
+      distancia1 = 0.01715 * tiempo1;
       digitalWrite(disttrig2, HIGH);
       delay(1);
       digitalWrite(disttrig2, LOW);
       tiempo2 = pulseIn(distecho2, HIGH);
-      distancia2 = 0.01715*tiempo2;
+      distancia2 = 0.01715 * tiempo2;
       digitalWrite(disttrig3, HIGH);
       delay(1);
       digitalWrite(disttrig3, LOW);
       tiempo3 = pulseIn(distecho3, HIGH);
-      distancia3 = 0.01715*tiempo3;
+      distancia3 = 0.01715 * tiempo3;
       digitalWrite(disttrig4, HIGH);
       delay(1);
       digitalWrite(disttrig4, LOW);
       tiempo4 = pulseIn(distecho4, HIGH);
-      distancia4 = 0.01715*tiempo4;
-      if(aleatorio = 1){
-        if(distancia1<10){
+      distancia4 = 0.01715 * tiempo4;
+      if (aleatorio = 1) {
+        if (distancia1 < p) {
+          mySerial.print('k');
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 1);
+          lcd.print("puede doblar >");
+          lcd.setCursor(0,2);
+          lcd.print("puede avanzar v");
+          lcd.setCursor(0,3);
+          lcd.print("puede doblar <");
           digitalWrite(semrn, LOW);
-          digitalWrite(semgn, HIGH);
-          delay(1600);
-          digitalWrite(semgn, LOW);
-          for (x; x<4; x++){
-            digitalWrite(semyn, HIGH);
-            delay(500);
-            digitalWrite(semyn, LOW);
-            delay(500);
-          }
-          x=0;
-          digitalWrite(semrn, HIGH);
-        }
-        else if(distancia1<15){
-          digitalWrite(semrdn, LOW);
-          digitalWrite(semgdn, HIGH);
-          delay(1600);
-          digitalWrite(semgdn, LOW);
-          for (x; x<4; x++){
-            digitalWrite(semydn, HIGH);
-            delay(500);
-            digitalWrite(semydn, LOW);
-            delay(500);
-          }
-          x=0;
-          digitalWrite(semrdn, HIGH);
-        }
-      }
-      else if(aleatorio = 2){
-        if(distancia2<10){
-          digitalWrite(semrd, LOW);
-          digitalWrite(semgd, HIGH);
-          delay(1600);
-          digitalWrite(semgd, LOW);
-          for (x; x<4; x++){
-            digitalWrite(semyd, HIGH);
-            delay(500);
-            digitalWrite(semyd, LOW);
-            delay(500);
-          }
-          x=0;
-          digitalWrite(semrd, HIGH);
-        }
-        }
-      else if(aleatorio = 3){
-        if(distancia3<10){
           digitalWrite(semrs, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgn, HIGH);
           digitalWrite(semgs, HIGH);
-          delay(1600);
-          digitalWrite(semgs, LOW);
-          for (x; x<4; x++){
+          digitalWrite(sempasog1, HIGH);
+          delay(7000);
+          digitalWrite(semgn, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasoy1, HIGH);
+          for (x; x < 4; x++) {
+            digitalWrite(semyn, HIGH);
             digitalWrite(semys, HIGH);
             delay(500);
+            digitalWrite(semyn, LOW);
             digitalWrite(semys, LOW);
             delay(500);
           }
-          x=0;
+          x = 0;
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, HIGH);
+          digitalWrite(semrn, HIGH);
           digitalWrite(semrs, HIGH);
+          lcd.clear();
         }
-      else if(distancia3<15){
-        digitalWrite(semrds, LOW);
-        digitalWrite(semgds, HIGH);
-        delay(1600);
-        digitalWrite(semgds, LOW);
-        for (x; x<4; x++){
-          digitalWrite(semyds, HIGH);
-          delay(500);
-          digitalWrite(semyds, LOW);
-          delay(500);
-        }
-        x=0;
-        digitalWrite(semrds, HIGH);
-      }
-    
-      else if(aleatorio = 4){
-          if(distancia4<10){
-            digitalWrite(semri, LOW);
-            digitalWrite(semgi, HIGH);
-            delay(1600);
-            digitalWrite(semgi, LOW);
-            for (x; x<4; x++){
-              digitalWrite(semyi, HIGH);
-              delay(500);
-              digitalWrite(semyi, LOW);
-              delay(500);
-            }
-            x=0;
-            digitalWrite(semri, HIGH);
+        else if (distancia1 < j) {
+          mySerial.print('k');
+          lcd.print("puede avanzar ^");
+          digitalWrite(semrdn, LOW);
+          digitalWrite(semrn, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgdn, HIGH);
+          digitalWrite(semrn, HIGH);
+          digitalWrite(sempasog1, HIGH);
+          delay(7000);
+          lcd.setCursor(0, 1);
+          lcd.print("puede doblar <");
+          digitalWrite(semgdn, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasoy1, HIGH);
+          for (x; x < 4; x++) {
+            digitalWrite(semydn, HIGH);
+            digitalWrite(semyn, HIGH);
+            delay(500);
+            digitalWrite(semydn, LOW);
+            digitalWrite(semyn, LOW);
+            delay(500);
           }
+          x = 0;
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, HIGH);
+          digitalWrite(semrdn, HIGH);
+          digitalWrite(semrn, HIGH);
+          lcd.clear();
+        }
       }
+      else if (aleatorio = 2) {
+        if (distancia2 < p) {
+          mySerial.print('k');
+          lcd.print("puede avanzar >");
+          lcd.print("puede avanzar <");
+          digitalWrite(semrd, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(semgd, HIGH);
+          digitalWrite(semri, HIGH);
+          digitalWrite(sempasog2, HIGH);
+          delay(7000);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(sempasoy2, HIGH);
+          for (x; x < 4; x++) {
+            digitalWrite(semyd, HIGH);
+            digitalWrite(semyi, HIGH);
+            delay(500);
+            digitalWrite(semyd, LOW);
+            digitalWrite(semyi, LOW);
+            delay(500);
+          }
+          x = 0;
+          digitalWrite(sempasoy2, LOW);          
+          digitalWrite(semrd, HIGH);
+          digitalWrite(semri, HIGH);
+          digitalWrite(sempasor2, HIGH);
+          lcd.clear();
+        }
+      } 
+      else if (aleatorio = 3) {
+        if (distancia3 < p) {
+          mySerial.print('k');
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 1);
+          lcd.print("puede doblar >");
+          lcd.setCursor(0,2);
+          lcd.print("puede avanzar v");
+          lcd.setCursor(0,3);
+          lcd.print("puede doblar <");
+          digitalWrite(semrs, LOW);
+          digitalWrite(semrn, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgs, HIGH);
+          digitalWrite(semrs, HIGH);
+          digitalWrite(sempasog3, HIGH);
+          delay(7000);
+          digitalWrite(semgs, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, HIGH);
+          for (x; x < 4; x++) {
+            digitalWrite(semys, HIGH);
+            digitalWrite(semyn, HIGH);
+            delay(500);
+            digitalWrite(semys, LOW);
+            digitalWrite(semyn, LOW);
+            delay(500);
+          }
+          x = 0;
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, HIGH);
+          digitalWrite(semrs, HIGH);
+          digitalWrite(semrn, HIGH);
+          lcd.clear();
+        }
+        else if (distancia1 < j) {
+          mySerial.print('k');
+          lcd.print("puede avanzar v");
+          digitalWrite(semrds, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgds, HIGH);
+          digitalWrite(sempasog3, HIGH);
+          delay(7000);
+          lcd.setCursor(0, 1);
+          lcd.print("puede doblar >");
+          digitalWrite(semgds, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, HIGH);
+          for (x; x < 4; x++) {
+            digitalWrite(semyds, HIGH);
+            delay(500);
+            digitalWrite(semyds, LOW);
+            delay(500);
+          }
+          x = 0;
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, HIGH);
+          digitalWrite(semrds, HIGH);
+          lcd.clear();
+        }
       }
+      else if (aleatorio = 4) {
+        if (distancia4 < p) {
+          mySerial.print('k');
+          lcd.print("puede avanzar <");
+          lcd.print("puede avanzar >");
+          digitalWrite(semri, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(semgi, HIGH);
+          digitalWrite(semgd, HIGH);
+          digitalWrite(sempasog4, HIGH);
+          delay(7000);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(sempasoy4, HIGH);
+          for (x; x < 4; x++) {
+            digitalWrite(semyi, HIGH);
+            digitalWrite(semrd, HIGH);
+            delay(500);
+            digitalWrite(semyi, LOW);
+            digitalWrite(semyi, LOW);
+            delay(500);
+          }
+          x = 0;
+          digitalWrite(sempasoy4, LOW);          
+          digitalWrite(semri, HIGH);
+          digitalWrite(semrd, HIGH);
+          digitalWrite(sempasor4, HIGH);
+          lcd.clear();
+        }
       }
-      if(distancia1<20 and distancia2>20 and distancia3>20 and distancia4>20){
-      if(distancia1<10){
-        digitalWrite(semrn, LOW);
-        digitalWrite(semgn, HIGH);
-        delay(1600);
-        digitalWrite(semgn, LOW);
-        for (x; x<4; x++){
-          digitalWrite(semyn, HIGH);
-          delay(500);
+    }
+    while ((distancia1 < l and distancia2 < l) or (distancia1 < l and distancia3 < l) or (distancia1 < l and distancia4 < l) or (distancia2 < l and distancia3 < l) or (distancia2 < l and distancia4 < l) or (distancia3 < l and distancia4 < l)) {
+      aleatorio = random(1, 5);
+      if (mySerial.available()){
+        recep=mySerial.read();
+        mySerial.print('n');
+        if(recep == 'a' or recep == 'b'){
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasoy2, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasoy4, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgn, LOW);
           digitalWrite(semyn, LOW);
-          delay(500);
-        }
-        x=0;
-        digitalWrite(semrn, HIGH);
-      }
-      else if(distancia1<15){
-        digitalWrite(semrdn, LOW);
-        digitalWrite(semgdn, HIGH);
-        delay(1600);
-        digitalWrite(semgdn, LOW);
-        for (x; x<4; x++){
-          digitalWrite(semydn, HIGH);
-          delay(500);
-          digitalWrite(semydn, LOW);
-          delay(500);
-        }
-        x=0;
-        digitalWrite(semrdn, HIGH);
-        }
-      }
-      else if(distancia2<20 and distancia1>20 and distancia3>20 and distancia4>20){
-        digitalWrite(semrd, LOW);
-        digitalWrite(semgd, HIGH);
-        delay(1600);
-        digitalWrite(semgd, LOW);
-        for (x; x<4; x++){
-          digitalWrite(semyd, HIGH);
-          delay(500);
+          digitalWrite(semrn, LOW);
+          digitalWrite(semgs, LOW);
+          digitalWrite(semys, LOW);
+          digitalWrite(semrs, LOW);
+          digitalWrite(semgd, LOW);
           digitalWrite(semyd, LOW);
-          delay(500);
+          digitalWrite(semrd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(semyi, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(semgdn, LOW);
+          digitalWrite(semydn, LOW);
+          digitalWrite(semrdn, LOW);
+          digitalWrite(semgds, LOW);
+          digitalWrite(semyds, LOW);
+          digitalWrite(semrds, LOW);
+          digitalWrite(sempasog1, HIGH);
+          digitalWrite(semgn, HIGH);
+          digitalWrite(semgs, HIGH);
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 3);
+          lcd.print("puede avanzar v");
+          delay(7000);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(semgs, LOW);
+          digitalWrite(sempasoy1, HIGH);
+          for(x; x<4; x++){
+            digitalWrite(semyn, HIGH);
+            digitalWrite(semys, HIGH);
+            delay(500);
+            digitalWrite(semyn, LOW);
+            digitalWrite(semys, LOW);
+            delay(500);
+          }
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, HIGH);
+          digitalWrite(semrn, HIGH);
+          digitalWrite(semrs, HIGH);
+          lcd.clear();
         }
-        x=0;
-        digitalWrite(semrd, HIGH);
+        else if(recep == 'c' or recep == 'd'){
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasoy2, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasoy4, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(semyn, LOW);
+          digitalWrite(semrn, LOW);
+          digitalWrite(semgs, LOW);
+          digitalWrite(semys, LOW);
+          digitalWrite(semrs, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semyd, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(semyi, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(semgdn, LOW);
+          digitalWrite(semydn, LOW);
+          digitalWrite(semrdn, LOW);
+          digitalWrite(semgds, LOW);
+          digitalWrite(semyds, LOW);
+          digitalWrite(semrds, LOW);
+          digitalWrite(sempasog2, HIGH);
+          digitalWrite(semgd, HIGH);
+          digitalWrite(semgi, HIGH);
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 3);
+          lcd.print("puede avanzar v");
+          delay(7000);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(sempasoy2, HIGH);
+          for(x; x<4; x++){
+            digitalWrite(semyd, HIGH);
+            digitalWrite(semyi, HIGH);
+            delay(500);
+            digitalWrite(semyd, LOW);
+            digitalWrite(semyi, LOW);
+            delay(500);
+          }
+          digitalWrite(sempasoy2, LOW);
+          digitalWrite(sempasor2, HIGH);
+          digitalWrite(semrd, HIGH);
+          digitalWrite(semri, HIGH);
+          lcd.clear();
+        }
+        else if(recep == 'e' or recep == 'f'){
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasoy2, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasoy4, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(semyn, LOW);
+          digitalWrite(semrn, LOW);
+          digitalWrite(semgs, LOW);
+          digitalWrite(semys, LOW);
+          digitalWrite(semrs, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semyd, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(semyi, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(semgdn, LOW);
+          digitalWrite(semydn, LOW);
+          digitalWrite(semrdn, LOW);
+          digitalWrite(semgds, LOW);
+          digitalWrite(semyds, LOW);
+          digitalWrite(semrds, LOW);
+          digitalWrite(sempasog3, HIGH);
+          digitalWrite(semgn, HIGH);
+          digitalWrite(semgs, HIGH);
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 3);
+          lcd.print("puede avanzar v");
+          delay(7000);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(semgs, LOW);
+          digitalWrite(sempasoy3, HIGH);
+          for(x; x<4; x++){
+            digitalWrite(semyn, HIGH);
+            digitalWrite(semys, HIGH);
+            delay(500);
+            digitalWrite(semyn, LOW);
+            digitalWrite(semys, LOW);
+            delay(500);
+          }
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, HIGH);
+          digitalWrite(semrn, HIGH);
+          digitalWrite(semrs, HIGH);
+          lcd.clear();
+        }
+        else if(recep == 'g' or recep == 'h'){
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasoy2, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasoy4, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(semyn, LOW);
+          digitalWrite(semrn, LOW);
+          digitalWrite(semgs, LOW);
+          digitalWrite(semys, LOW);
+          digitalWrite(semrs, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semyd, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(semyi, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(semgdn, LOW);
+          digitalWrite(semydn, LOW);
+          digitalWrite(semrdn, LOW);
+          digitalWrite(semgds, LOW);
+          digitalWrite(semyds, LOW);
+          digitalWrite(semrds, LOW);
+          digitalWrite(sempasog4, HIGH);
+          digitalWrite(semgd, HIGH);
+          digitalWrite(semgi, HIGH);
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 3);
+          lcd.print("puede avanzar v");
+          delay(7000);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(sempasoy4, HIGH);
+          for(x; x<4; x++){
+            digitalWrite(semyd, HIGH);
+            digitalWrite(semyi, HIGH);
+            delay(500);
+            digitalWrite(semyd, LOW);
+            digitalWrite(semyi, LOW);
+            delay(500);
+          }
+          digitalWrite(sempasoy4, LOW);
+          digitalWrite(sempasor4, HIGH);
+          digitalWrite(semrd, HIGH);
+          digitalWrite(semri, HIGH);
+          lcd.clear();
+        }
       }
-      else if(distancia3<20 and distancia1>20 and distancia2>20 and distancia4>20){
-        if(distancia3<10){
+      digitalWrite(disttrig1, HIGH);
+      delay(1);
+      digitalWrite(disttrig1, LOW);
+      tiempo1 = pulseIn(distecho1, HIGH);
+      distancia1 = 0.01715 * tiempo1;
+      digitalWrite(disttrig2, HIGH);
+      delay(1);
+      digitalWrite(disttrig2, LOW);
+      tiempo2 = pulseIn(distecho2, HIGH);
+      distancia2 = 0.01715 * tiempo2;
+      digitalWrite(disttrig3, HIGH);
+      delay(1);
+      digitalWrite(disttrig3, LOW);
+      tiempo3 = pulseIn(distecho3, HIGH);
+      distancia3 = 0.01715 * tiempo3;
+      digitalWrite(disttrig4, HIGH);
+      delay(1);
+      digitalWrite(disttrig4, LOW);
+      tiempo4 = pulseIn(distecho4, HIGH);
+      distancia4 = 0.01715 * tiempo4;
+      if (aleatorio = 1) {
+        if (distancia1 < p) {
+          mySerial.print('k');
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 1);
+          lcd.print("puede doblar >");
+          lcd.setCursor(0,2);
+          lcd.print("puede avanzar v");
+          lcd.setCursor(0,3);
+          lcd.print("puede doblar <");
+          digitalWrite(semrn, LOW);
+          digitalWrite(semrs, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgn, HIGH);
+          digitalWrite(semgs, HIGH);
+          digitalWrite(sempasog1, HIGH);
+          delay(7000);
+          digitalWrite(semgn, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasoy1, HIGH);
+          for (x; x < 4; x++) {
+            digitalWrite(semyn, HIGH);
+            digitalWrite(semys, HIGH);
+            delay(500);
+            digitalWrite(semyn, LOW);
+            digitalWrite(semys, LOW);
+            delay(500);
+          }
+          x = 0;
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, HIGH);
+          digitalWrite(semrn, HIGH);
+          digitalWrite(semrs, HIGH);
+          lcd.clear();
+        }
+        else if (distancia1 < j) {
+          mySerial.print('k');
+          lcd.print("puede avanzar ^");
+          digitalWrite(semrdn, LOW);
+          digitalWrite(semrn, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgdn, HIGH);
+          digitalWrite(semrn, HIGH);
+          digitalWrite(sempasog1, HIGH);
+          delay(7000);
+          lcd.setCursor(0, 1);
+          lcd.print("puede doblar <");
+          digitalWrite(semgdn, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasoy1, HIGH);
+          for (x; x < 4; x++) {
+            digitalWrite(semydn, HIGH);
+            digitalWrite(semyn, HIGH);
+            delay(500);
+            digitalWrite(semydn, LOW);
+            digitalWrite(semyn, LOW);
+            delay(500);
+          }
+          x = 0;
+          digitalWrite(sempasoy1, LOW);
+          digitalWrite(sempasor1, HIGH);
+          digitalWrite(semrdn, HIGH);
+          digitalWrite(semrn, HIGH);
+          lcd.clear();
+        }
+      }
+      else if (aleatorio = 2) {
+        if (distancia2 < p) {
+          mySerial.print('k');
+          lcd.print("puede avanzar >");
+          lcd.print("puede avanzar <");
+          digitalWrite(semrd, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(semgd, HIGH);
+          digitalWrite(semri, HIGH);
+          digitalWrite(sempasog2, HIGH);
+          delay(7000);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(semgd, LOW);
+          digitalWrite(semgi, LOW);
+          digitalWrite(sempasoy2, HIGH);
+          for (x; x < 4; x++) {
+            digitalWrite(semyd, HIGH);
+            digitalWrite(semyi, HIGH);
+            delay(500);
+            digitalWrite(semyd, LOW);
+            digitalWrite(semyi, LOW);
+            delay(500);
+          }
+          x = 0;
+          digitalWrite(sempasoy2, LOW);          
+          digitalWrite(semrd, HIGH);
+          digitalWrite(semri, HIGH);
+          digitalWrite(sempasor2, HIGH);
+          lcd.clear();
+        }
+      } 
+      else if (aleatorio = 3) {
+        if (distancia3 < p) {
+          mySerial.print('k');
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 1);
+          lcd.print("puede doblar >");
+          lcd.setCursor(0,2);
+          lcd.print("puede avanzar v");
+          lcd.setCursor(0,3);
+          lcd.print("puede doblar <");
+          digitalWrite(semrs, LOW);
+          digitalWrite(semrn, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgs, HIGH);
+          digitalWrite(semrs, HIGH);
+          digitalWrite(sempasog3, HIGH);
+          delay(7000);
+          digitalWrite(semgs, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, HIGH);
+          for (x; x < 4; x++) {
+            digitalWrite(semys, HIGH);
+            digitalWrite(semyn, HIGH);
+            delay(500);
+            digitalWrite(semys, LOW);
+            digitalWrite(semyn, LOW);
+            delay(500);
+          }
+          x = 0;
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, HIGH);
+          digitalWrite(semrs, HIGH);
+          digitalWrite(semrn, HIGH);
+          lcd.clear();
+        }
+        else if (distancia1 < j) {
+          mySerial.print('k');
+          lcd.print("puede avanzar v");
+          digitalWrite(semrds, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgds, HIGH);
+          digitalWrite(sempasog3, HIGH);
+          delay(7000);
+          lcd.setCursor(0, 1);
+          lcd.print("puede doblar >");
+          digitalWrite(semgds, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, HIGH);
+          for (x; x < 4; x++) {
+            digitalWrite(semyds, HIGH);
+            delay(500);
+            digitalWrite(semyds, LOW);
+            delay(500);
+          }
+          x = 0;
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, HIGH);
+          digitalWrite(semrds, HIGH);
+          lcd.clear();
+        }
+      }
+      else if (aleatorio = 4) {
+        if (distancia4 < p) {
+          mySerial.print('k');
+          lcd.print("puede avanzar <");
+          lcd.print("puede avanzar >");
+          digitalWrite(semri, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(semgi, HIGH);
+          digitalWrite(semgd, HIGH);
+          digitalWrite(sempasog4, HIGH);
+          delay(7000);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(sempasoy4, HIGH);
+          for (x; x < 4; x++) {
+            digitalWrite(semyi, HIGH);
+            digitalWrite(semrd, HIGH);
+            delay(500);
+            digitalWrite(semyi, LOW);
+            digitalWrite(semyi, LOW);
+            delay(500);
+          }
+          x = 0;
+          digitalWrite(sempasoy4, LOW);          
+          digitalWrite(semri, HIGH);
+          digitalWrite(semrd, HIGH);
+          digitalWrite(sempasor4, HIGH);
+          lcd.clear();
+        }
+      }
+    }
+    if (distancia1 < l and distancia2 > l and distancia3 > l and distancia4 > l) {
+      if (distancia1 < p) {
+        mySerial.print('k');
+        lcd.print("puede avanzar ^");
+        lcd.setCursor(0, 1);
+        lcd.print("puede doblar >");
+        lcd.setCursor(0,2);
+        lcd.print("puede avanzar v");
+        lcd.setCursor(0,3);
+        lcd.print("puede doblar <");
+        digitalWrite(semrn, LOW);
         digitalWrite(semrs, LOW);
+        digitalWrite(sempasog1, LOW);
+        digitalWrite(sempasog2, LOW);
+        digitalWrite(sempasog3, LOW);
+        digitalWrite(sempasog4, LOW);
+        digitalWrite(sempasor1, LOW);
+        digitalWrite(sempasor2, LOW);
+        digitalWrite(sempasor3, LOW);
+        digitalWrite(sempasor4, LOW);
+        digitalWrite(semgn, HIGH);
         digitalWrite(semgs, HIGH);
-        delay(1600);
-        digitalWrite(semgs, LOW);
-        for (x; x<4; x++){
+        digitalWrite(sempasog1, HIGH);
+        delay(7000);
+        digitalWrite(semgn, LOW);
+        digitalWrite(semgn, LOW);
+        digitalWrite(sempasog1, LOW);
+        digitalWrite(sempasoy1, HIGH);
+        for (x; x < 4; x++) {
+          digitalWrite(semyn, HIGH);
           digitalWrite(semys, HIGH);
           delay(500);
+          digitalWrite(semyn, LOW);
           digitalWrite(semys, LOW);
           delay(500);
         }
-        x=0;
+        x = 0;
+        digitalWrite(sempasoy1, LOW);
+        digitalWrite(sempasor1, HIGH);
+        digitalWrite(semrn, HIGH);
         digitalWrite(semrs, HIGH);
+        lcd.clear();
+      }
+      else if (distancia1 < j) {
+        mySerial.print('k');
+        lcd.print("puede avanzar ^");
+        digitalWrite(semrdn, LOW);
+        digitalWrite(semrn, LOW);
+        digitalWrite(sempasog1, LOW);
+        digitalWrite(sempasog2, LOW);
+        digitalWrite(sempasog3, LOW);
+        digitalWrite(sempasog4, LOW);
+        digitalWrite(sempasor1, LOW);
+        digitalWrite(sempasor2, LOW);
+        digitalWrite(sempasor3, LOW);
+        digitalWrite(sempasor4, LOW);
+        digitalWrite(semgdn, HIGH);
+        digitalWrite(semrn, HIGH);
+        digitalWrite(sempasog1, HIGH);
+        delay(7000);
+        lcd.setCursor(0, 1);
+        lcd.print("puede doblar <");
+        digitalWrite(semgdn, LOW);
+        digitalWrite(semgn, LOW);
+        digitalWrite(sempasog1, LOW);
+        digitalWrite(sempasoy1, HIGH);
+        for (x; x < 4; x++) {
+          digitalWrite(semydn, HIGH);
+          digitalWrite(semyn, HIGH);
+          delay(500);
+          digitalWrite(semydn, LOW);
+          digitalWrite(semyn, LOW);
+          delay(500);
         }
-        else if(distancia3<15){
+        x = 0;
+        digitalWrite(sempasoy1, LOW);
+        digitalWrite(sempasor1, HIGH);
+        digitalWrite(semrdn, HIGH);
+        digitalWrite(semrn, HIGH);
+        lcd.clear();
+      }
+    }
+    else if (distancia2 < l and distancia1 > l and distancia3 > l and distancia4 > l) {
+      if (distancia2 < p) {
+        mySerial.print('k');
+        lcd.print("puede avanzar >");
+        lcd.print("puede avanzar <");
+        digitalWrite(semrd, LOW);
+        digitalWrite(semri, LOW);
+        digitalWrite(sempasor1, LOW);
+        digitalWrite(sempasor2, LOW);
+        digitalWrite(sempasor3, LOW);
+        digitalWrite(sempasor4, LOW);
+        digitalWrite(sempasog1, LOW);
+        digitalWrite(sempasog2, LOW);
+        digitalWrite(sempasog3, LOW);
+        digitalWrite(sempasog4, LOW);
+        digitalWrite(semgd, HIGH);
+        digitalWrite(semri, HIGH);
+        digitalWrite(sempasog2, HIGH);
+        delay(7000);
+        digitalWrite(sempasog2, LOW);
+        digitalWrite(semgd, LOW);
+        digitalWrite(semgi, LOW);
+        digitalWrite(sempasoy2, HIGH);
+        for (x; x < 4; x++) {
+          digitalWrite(semyd, HIGH);
+          digitalWrite(semyi, HIGH);
+          delay(500);
+          digitalWrite(semyd, LOW);
+          digitalWrite(semyi, LOW);
+          delay(500);
+        }
+        x = 0;
+        digitalWrite(sempasoy2, LOW);          
+        digitalWrite(semrd, HIGH);
+        digitalWrite(semri, HIGH);
+        digitalWrite(sempasor2, HIGH);
+        lcd.clear();
+      }
+    }
+    else if (distancia3 < l and distancia1 > l and distancia2 > l and distancia4 > l) {
+        if (distancia3 < p) {
+          mySerial.print('k');
+          lcd.print("puede avanzar ^");
+          lcd.setCursor(0, 1);
+          lcd.print("puede doblar >");
+          lcd.setCursor(0,2);
+          lcd.print("puede avanzar v");
+          lcd.setCursor(0,3);
+          lcd.print("puede doblar <");
+          digitalWrite(semrs, LOW);
+          digitalWrite(semrn, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(semgs, HIGH);
+          digitalWrite(semrs, HIGH);
+          digitalWrite(sempasog3, HIGH);
+          delay(7000);
+          digitalWrite(semgs, LOW);
+          digitalWrite(semgn, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, HIGH);
+          for (x; x < 4; x++) {
+            digitalWrite(semys, HIGH);
+            digitalWrite(semyn, HIGH);
+            delay(500);
+            digitalWrite(semys, LOW);
+            digitalWrite(semyn, LOW);
+            delay(500);
+          }
+          x = 0;
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, HIGH);
+          digitalWrite(semrs, HIGH);
+          digitalWrite(semrn, HIGH);
+          lcd.clear();
+        }
+        else if (distancia1 < j) {
+          mySerial.print('k');
+          lcd.print("puede avanzar v");
           digitalWrite(semrds, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
           digitalWrite(semgds, HIGH);
-          delay(1600);
+          digitalWrite(sempasog3, HIGH);
+          delay(7000);
+          lcd.setCursor(0, 1);
+          lcd.print("puede doblar >");
           digitalWrite(semgds, LOW);
-          for (x; x<4; x++){
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasoy3, HIGH);
+          for (x; x < 4; x++) {
             digitalWrite(semyds, HIGH);
             delay(500);
             digitalWrite(semyds, LOW);
             delay(500);
           }
-          x=0;
+          x = 0;
+          digitalWrite(sempasoy3, LOW);
+          digitalWrite(sempasor3, HIGH);
           digitalWrite(semrds, HIGH);
+          lcd.clear();
         }
       }
-      else if(distancia4<20 and distancia1>20 and distancia2>20 and distancia3>20){
-        if(distancia4<10){
+      else if (aleatorio = 4) {
+        if (distancia4 < p) {
+          mySerial.print('k');
+          lcd.print("puede avanzar <");
+          lcd.print("puede avanzar >");
           digitalWrite(semri, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
           digitalWrite(semgi, HIGH);
-          delay(1600);
-          digitalWrite(semgi, LOW);
-          for (x; x<4; x++){
+          digitalWrite(semgd, HIGH);
+          digitalWrite(sempasog4, HIGH);
+          delay(7000);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(sempasoy4, HIGH);
+          for (x; x < 4; x++) {
             digitalWrite(semyi, HIGH);
+            digitalWrite(semrd, HIGH);
             delay(500);
+            digitalWrite(semyi, LOW);
             digitalWrite(semyi, LOW);
             delay(500);
           }
-          x=0;
+          x = 0;
+          digitalWrite(sempasoy4, LOW);          
           digitalWrite(semri, HIGH);
+          digitalWrite(semrd, HIGH);
+          digitalWrite(sempasor4, HIGH);
+          lcd.clear();
         }
       }
     }
-}
-  /*while(True){
-    if(distancia1<20){
-    lcd.print("auto en calle 1");
-    digitalWrite(semgn, HIGH);
-    delay(1000);
+    else if (distancia4 < l and distancia1 > l and distancia2 > l and distancia3 > l) {
+        if (distancia4 < p) {
+          mySerial.print('k');
+          lcd.print("puede avanzar <");
+          lcd.print("puede avanzar >");
+          digitalWrite(semri, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(sempasor1, LOW);
+          digitalWrite(sempasor2, LOW);
+          digitalWrite(sempasor3, LOW);
+          digitalWrite(sempasor4, LOW);
+          digitalWrite(sempasog1, LOW);
+          digitalWrite(sempasog2, LOW);
+          digitalWrite(sempasog3, LOW);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(semgi, HIGH);
+          digitalWrite(semgd, HIGH);
+          digitalWrite(sempasog4, HIGH);
+          delay(7000);
+          digitalWrite(sempasog4, LOW);
+          digitalWrite(semrd, LOW);
+          digitalWrite(semri, LOW);
+          digitalWrite(sempasoy4, HIGH);
+          for (x; x < 4; x++) {
+            digitalWrite(semyi, HIGH);
+            digitalWrite(semrd, HIGH);
+            delay(500);
+            digitalWrite(semyi, LOW);
+            digitalWrite(semyi, LOW);
+            delay(500);
+          }
+          x = 0;
+          digitalWrite(sempasoy4, LOW);          
+          digitalWrite(semri, HIGH);
+          digitalWrite(semrd, HIGH);
+          digitalWrite(sempasor4, HIGH);
+          lcd.clear();
+        }
+      }
     }
-    else if(distancia2<20){
-    lcd.print("auto en calle 2");
-    digitalWrite(semgs, HIGH);
-    delay(1000);
-    }
-    else if(distancia3<20){
-    lcd.print("auto en calle 3");
-    digitalWrite(semgd, HIGH);
-    delay(1000);
-    }
-    else if(distancia4<20){
-    lcd.print("auto en calle 4");
-    digitalWrite(semgi, HIGH);
-    delay(1000);
-    }
-    lcd.print("auto en sensor 4");
-    lcd.clear();
-    delay(100);
-    son = digitalRead(sonido);
-    if(son == HIGH){
-    digitalWrite(semgn, HIGH);
-    }
-    else{
-    digitalWrite(semgn, LOW);
-    }
-    digitalWrite(disttrig1, HIGH);
-    delay(1);
-    digitalWrite(disttrig1, LOW);
-    tiempo1 = pulseIn(distecho1, HIGH);
-    distancia1 = 0.01715*tiempo1;
-    Serial.println(distancia1);
-    delay(300);
-    digitalWrite(disttrig2, HIGH);
-    delay(1);
-    digitalWrite(disttrig2, LOW);
-    tiempo2 = pulseIn(distecho2, HIGH);
-    distancia2 = 0.01715*tiempo2;
-    Serial.println(distancia2);
-    delay(300);
-    digitalWrite(disttrig3, HIGH);
-    delay(1);
-    digitalWrite(disttrig3, LOW);
-    tiempo3 = pulseIn(distecho3, HIGH);
-    distancia3 = 0.01715*tiempo3;
-    Serial.println(distancia3);
-    delay(300);
-    digitalWrite(disttrig4, HIGH);
-    delay(1);
-    digitalWrite(disttrig4, LOW);
-    tiempo4 = pulseIn(distecho4, HIGH);
-    distancia4 = 0.01715*tiempo4;
-    Serial.println(distancia4);
-    delay(300);
+  }
+  digitalWrite(semgn, LOW);
+  digitalWrite(semyn, LOW);
+  digitalWrite(semrn, HIGH);
+  digitalWrite(semgs, LOW);
+  digitalWrite(semys, LOW);
+  digitalWrite(semrs, HIGH);
+  digitalWrite(semgd, LOW);
+  digitalWrite(semyd, LOW);
+  digitalWrite(semrd, HIGH);
+  digitalWrite(semgi, LOW);
+  digitalWrite(semyi, LOW);
+  digitalWrite(semri, HIGH);
+  digitalWrite(semgdn, LOW);
+  digitalWrite(semydn, LOW);
+  digitalWrite(semrdn, HIGH);
+  digitalWrite(semgds, LOW);
+  digitalWrite(semyds, LOW);
+  digitalWrite(semrds, HIGH);
 
-    digitalWrite(semgn, HIGH);
-    delay(100);
-    digitalWrite(semyn, HIGH);
-    delay(100);
-    digitalWrite(semrn, HIGH);
-    delay(100);
-    digitalWrite(semgs, HIGH);
-    delay(100);
-    digitalWrite(semys, HIGH);
-    delay(100);
-    digitalWrite(semrs, HIGH);
-    delay(100);
-    digitalWrite(semgd, HIGH);
-    delay(100);
-    digitalWrite(semyd, HIGH);
-    delay(100);
-    digitalWrite(semrd, HIGH);
-    delay(100);
-    digitalWrite(semgi, HIGH);
-    delay(100);
-    digitalWrite(semyi, HIGH);
-    delay(100);
-    digitalWrite(semri, HIGH);
-    delay(100);
-    digitalWrite(semgdn, HIGH);
-    delay(100);
-    digitalWrite(semydn, HIGH);
-    delay(100); 
-    digitalWrite(semrdn, HIGH);
-    delay(100); 
-    digitalWrite(semgds, HIGH);
-    delay(100); 
-    digitalWrite(semyds, HIGH);
-    delay(100); 
-    digitalWrite(semrds, HIGH);
-    delay(100);
-    digitalWrite(semgn, LOW);
-    delay(100);
-    digitalWrite(semyn, LOW);
-    delay(100);
-    digitalWrite(semrn, LOW);
-    delay(100);
-    digitalWrite(semgs, LOW);
-    delay(100);
-    digitalWrite(semys, LOW);
-    delay(100);
-    digitalWrite(semrs, LOW);
-    delay(100);
-    digitalWrite(semgd, LOW);
-    delay(100);
-    digitalWrite(semyd, LOW);
-    delay(100);
-    digitalWrite(semrd, LOW);
-    delay(100);
-    digitalWrite(semgi, LOW);
-    delay(100);
-    digitalWrite(semyi, LOW);
-    delay(100);
-    digitalWrite(semri, LOW);
-    delay(100);
-    digitalWrite(semgdn, LOW);
-    delay(100);
-    digitalWrite(semydn, LOW);
-    delay(100); 
-    digitalWrite(semrdn, LOW);
-    delay(100); 
-    digitalWrite(semgds, LOW);
-    delay(100); 
-    digitalWrite(semyds, LOW);
-    delay(100); 
-    digitalWrite(semrds, LOW);
-    delay(100);}*/ 
+  digitalWrite(sempasog1, LOW);
+  digitalWrite(sempasoy1, LOW);
+  digitalWrite(sempasor1, HIGH);
+  digitalWrite(sempasog2, LOW);
+  digitalWrite(sempasoy2, LOW);
+  digitalWrite(sempasor2, HIGH);
+  digitalWrite(sempasog3, LOW);
+  digitalWrite(sempasoy3, LOW);
+  digitalWrite(sempasor3, HIGH);
+  digitalWrite(sempasog4, LOW);
+  digitalWrite(sempasoy4, LOW);
+  digitalWrite(sempasor4, HIGH);
+  
+  lcd.print("Vehiculo de");
+  lcd.setCursor(0, 1);
+  lcd.print("emergecia");
+  delay(5000);
+}
